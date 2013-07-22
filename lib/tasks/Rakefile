@@ -1,0 +1,25 @@
+
+namespace :setup do 
+	desc "Initiating setup"
+	task :init do
+		print "Name of the destination directory: "
+		name = STDIN.gets.strip
+		puts "Copying the files to #{name}/lib/tasks."
+		cp_r '.', "../#{name}/lib/tasks", verbose: false
+
+		print "Do you want to continue with the setup?(y/n): "
+		option = STDIN.gets.strip
+	
+	   	if option.to_s[0] =~ /[Yy]/ 
+			load "../#{name}/lib/tasks/init.rake"
+			cd "../#{name}"
+			Rake::Task["setup:create"].invoke(name.to_s)
+     		#cd "../#{name}"
+     		#sh "rake setup:create"
+        else 
+	     	puts "Exiting. You can each task individually. See rake -T for more info"
+	 	end
+
+
+	end
+end
